@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Madame Ganja Headshop — MVP 9:16</title>
+  <style>
+    :root {
+      --bg:#0b0b0b; --fg:#f1f1f1; --muted:#a9a9a9; --accent:#25d366; --card:#141414; --line:#222; --danger:#ff5555;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Helvetica,Arial,sans-serif}
+    .phone{width:360px; height:640px; margin:24px auto; background:var(--card); border:1px solid var(--line); border-radius:28px; box-shadow:0 10px 30px rgba(0,0,0,.45); overflow:hidden; position:relative}
+    .statusbar{height:28px; display:flex; align-items:center; justify-content:flex-end; padding:0 10px; gap:8px; font-size:12px; color:var(--muted); background:#0f0f0f; border-bottom:1px solid var(--line)}
+    .appbar{height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 12px; border-bottom:1px solid var(--line); background:#0f0f0f}
+    .logo{font-weight:700; letter-spacing:.3px}
+    .pill{display:inline-flex; align-items:center; gap:6px; background:#121212; border:1px solid var(--line); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted); cursor:pointer}
+    .screen{position:absolute; inset:28px 0 0 0; display:none; overflow:auto; -webkit-overflow-scrolling:touch}
+    .active{display:block}
+    .content{padding:12px}
+    .banner{height:140px; border:1px dashed var(--line); border-radius:16px; display:flex; align-items:center; justify-content:center; color:var(--muted)}
+    .categories{display:flex; gap:8px; overflow:auto; padding-bottom:6px; margin:10px 0}
+    .chip{padding:8px 12px; border:1px solid var(--line); border-radius:999px; white-space:nowrap; cursor:pointer}
+    .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+    .card{background:#121212; border:1px solid var(--line); border-radius:14px; overflow:hidden}
+    .ph-img{height:110px; background:#0d0d0d; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:12px}
+    .card-body{padding:10px; display:flex; flex-direction:column; gap:6px}
+    .title{font-size:13px; line-height:1.2}
+    .price{font-weight:700}
+    .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:#161616; color:var(--fg); cursor:pointer}
+    .btn.primary{background:var(--accent); color:#0b0b0b; border-color:#1aa651}
+    .btn.ghost{background:#131313}
+    .row{display:flex; align-items:center; justify-content:space-between}
+    .cart-row{display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px dashed var(--line)}
+    .cart-thumb{width:52px; height:52px; background:#0d0d0d; border:1px solid var(--line); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:10px}
+    .qty{display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border:1px solid var(--line); border-radius:8px}
+    .total{font-size:18px; font-weight:800}
+    .bottom-nav{position:absolute; bottom:0; left:0; right:0; height:56px; border-top:1px solid var(--line); background:#0f0f0f; display:flex}
+    .tab{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:11px; color:var(--muted); cursor:pointer}
+    .tab.active{color:var(--fg)}
+    .spacer{height:10px}
+    .note{color:var(--muted); font-size:12px}
+    .success{color:#c7ffd9}
+    .danger{color:var(--danger)}
+    .link{color:var(--accent); text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="phone" role="application" aria-label="Protótipo App Headshop 9:16">
+    <div class="statusbar"><span>100%</span><span>●●●</span></div>
+    <div class="appbar">
+      <div class="logo">Madame Ganja</div>
+      <div class="pill" id="cartPill" data-nav="cart">🛒 <span id="cartCount">0</span></div>
+    </div>
+
+    <!-- Splash -->
+    <section class="screen active" id="splash">
+      <div class="content" style="display:flex; height:100%; align-items:center; justify-content:center; text-align:center; gap:16px; flex-direction:column">
+        <div style="font-size:22px; font-weight:800">Headshop</div>
+        <div class="banner">[ Logo / Arte Splash 9:16 ]</div>
+        <button class="btn primary" data-nav="home">Entrar</button>
+        <div class="note">Dica: substitua placeholders por seus produtos reais.</div>
+      </div>
+    </section>
+
+    <!-- Home -->
+    <section class="screen" id="home">
+      <div class="content">
+        <div class="banner">[ Banner/Promo da Semana ]</div>
+        <div class="categories">
+          <div class="chip" data-category="Piteiras" data-nav="catalogo">Piteiras</div>
+          <div class="chip" data-category="Sedas" data-nav="catalogo">Sedas</div>
+          <div class="chip" data-category="Isqueiros" data-nav="catalogo">Isqueiros</div>
+          <div class="chip" data-category="Cinzeiros" data-nav="catalogo">Cinzeiros</div>
+          <div class="chip" data-category="Brindes" data-nav="catalogo">Brindes</div>
+        </div>
+        <h3>Destaques</h3>
+        <div class="grid">
+          <div class="card"><div class="ph-img">[Imagem]</div><div class="card-body"><div class="title">Produto</div><div class="price">R$ 0,00</div><button class="btn add">+ Adicionar</button></div></div>
+          <div class="card"><div class="ph-img">[Imagem]</div><div class="card-body"><div class="title">Produto</div><div class="price">R$ 0,00</div><button class="btn add">+ Adicionar</button></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catálogo -->
+    <section class="screen" id="catalogo">
+      <div class="content">
+        <div class="row"><div class="pill" id="currentCat">Categoria: Todas</div><button class="btn ghost" data-nav="home">Voltar</button></div>
+        <div class="grid">
+          <div class="card"><div class="ph-img">[Imagem]</div><div class="card-body"><div class="title">Produto</div><div class="price">R$ 0,00</div><button class="btn add">+ Adicionar</button></div></div>
+          <div class="card"><div class="ph-img">[Imagem]</div><div class="card-body"><div class="title">Produto</div><div class="price">R$ 0,00</div><button class="btn add">+ Adicionar</button></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Carrinho -->
+    <section class="screen" id="cart">
+      <div class="content">
+        <h3>Seu carrinho</h3>
+        <div id="cartList"><div class="note">Nada aqui ainda.</div></div>
+        <div class="spacer"></div>
+        <div class="row">
+          <div class="total">Total: <span id="total">R$ 0,00</span></div>
+          <button class="btn primary" data-nav="checkout">Finalizar compra</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Checkout -->
+    <section class="screen" id="checkout">
+      <div class="content">
+        <h3>Pagamento</h3>
+        <button class="btn primary" data-nav="confirm">Pix</button>
+        <button class="btn" data-nav="confirm">Cartão</button>
+        <button class="btn" data-nav="confirm">Dinheiro</button>
+        <button class="btn ghost" data-nav="cart">Voltar</button>
+      </div>
+    </section>
+
+    <!-- Confirm -->
+    <section class="screen" id="confirm">
+      <div class="content" style="text-align:center">
+        <div style="font-size:28px; font-weight:800; margin-top:30px">Pedido recebido! ✅</div>
+        <p class="success">Você receberá os detalhes no WhatsApp.</p>
+        <button class="btn primary" data-nav="home">Voltar</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const screens = document.querySelectorAll('.screen');
+    const cartList = document.getElementById('cartList');
+    const totalEl = document.getElementById('total');
+    const cartCount = document.getElementById('cartCount');
+    const state = { cart: [] };
+
+    function show(id){screens.forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+    function renderCart(){cartList.innerHTML = ''; if(state.cart.length===0){cartList.innerHTML='<div class=note>Nada aqui ainda.</div>';} const total=state.cart.reduce((s,i)=>s+i.preco*i.qtd,0); totalEl.textContent='R$ '+total.toFixed(2); cartCount.textContent=state.cart.reduce((s,i)=>s+i.qtd,0);}
+
+    document.addEventListener('click',(e)=>{const nav=e.target.dataset.nav;if(nav)show(nav); if(e.target.classList.contains('add')){state.cart.push({nome:'Produto',preco:0,qtd:1}); renderCart();}});
+  </script>
+</body>
+</html>
